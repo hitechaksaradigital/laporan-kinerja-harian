@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Activity Report System | HR &amp; Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "surface-container-lowest": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "on-background": "#191c1e",
+                    "error": "#ba1a1a",
+                    "surface-dim": "#d8dadc",
+                    "secondary-container": "#d0e1fb",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "on-secondary": "#ffffff",
+                    "primary": "#004ac6",
+                    "tertiary-fixed": "#6ffbbe",
+                    "background": "#f7f9fb",
+                    "on-tertiary": "#ffffff",
+                    "on-surface-variant": "#434655",
+                    "on-surface": "#191c1e",
+                    "surface-container": "#eceef0",
+                    "surface": "#f7f9fb",
+                    "inverse-on-surface": "#eff1f3",
+                    "outline": "#737686",
+                    "tertiary": "#006242",
+                    "surface-bright": "#f7f9fb",
+                    "on-primary-container": "#eeefff",
+                    "secondary": "#505f76",
+                    "on-secondary-container": "#54647a",
+                    "on-tertiary-fixed": "#002113",
+                    "inverse-surface": "#2d3133",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "surface-container-low": "#f2f4f6",
+                    "on-tertiary-container": "#bdffdb",
+                    "on-error-container": "#93000a",
+                    "on-secondary-fixed": "#0b1c30",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "on-primary-fixed": "#00174b",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "surface-container-highest": "#e0e3e5",
+                    "outline-variant": "#c3c6d7",
+                    "secondary-fixed": "#d3e4fe",
+                    "tertiary-container": "#007d55",
+                    "primary-fixed": "#dbe1ff",
+                    "surface-container-high": "#e6e8ea",
+                    "inverse-primary": "#b4c5ff",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "surface-tint": "#0053db",
+                    "primary-container": "#2563eb",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#e0e3e5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1440px",
+                    "sidebar-width": "260px",
+                    "gutter": "1.5rem",
+                    "margin-mobile": "1rem",
+                    "stack-sm": "0.5rem",
+                    "margin-desktop": "2rem",
+                    "stack-md": "1rem",
+                    "stack-lg": "2rem"
+            },
+            "fontFamily": {
+                    "body-sm": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "button-text": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-sm": ["12px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "button-text": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .compliance-progress {
+            transform: rotate(-90deg);
+        }
+        .chart-bar {
+            transition: height 1s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- SideNavBar Anchor -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] bg-surface-container-lowest border-r border-outline-variant flex flex-col p-6 z-50">
+<div class="mb-10 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">corporate_fare</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">Corporate Modern</h1>
+<p class="font-label-md text-label-md text-secondary">Enterprise Portal</p>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<!-- Active Navigation -->
+<a class="flex items-center gap-3 px-4 py-3 text-primary bg-secondary-container rounded-lg font-bold transition-transform duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-md text-label-md">History</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">fact_check</span>
+<span class="font-label-md text-label-md">Approval</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">manage_accounts</span>
+<span class="font-label-md text-label-md">Management</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-outline-variant">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A professional headshot of a corporate executive in a crisp navy blue suit, standing against a clean, softly lit office environment. The lighting is bright and modern, emphasizing the clean, light-mode corporate aesthetic. The subject exudes confidence and reliability, perfectly matching the design's professional tone." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ4xaq6XMHVX4WvpW3GXE0Xo7ZL4sMevSVYibQK8xG-bqZ_LYNyp_5QCYv7PwPFbP_4tTrxQP__aAd3KPnj9FkHTxtNjwuyydQ-pARH1pikesDD0ImJLUvQDkrJR_QbbQYY8mwKRuhspHITSvAewEeCiNkmEH8Uq39_ZCxG2kDD7W-PcDA-WogAwu9x_zSm5bawB_niELIPiSX60NJASrbaNXGK3-aERtyx1exc40SblOG6mFbMMab4g"/>
+<div class="overflow-hidden">
+<p class="font-label-md text-label-md font-bold truncate">Alex Rivera</p>
+<p class="font-body-sm text-body-sm text-secondary truncate">Senior Administrator</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar Anchor -->
+<header class="fixed top-0 right-0 w-[calc(100%-260px)] h-16 bg-surface-container-lowest border-b border-outline-variant flex justify-between items-center px-margin-desktop z-40">
+<div class="flex items-center gap-8 flex-1">
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface">Activity Report System</h2>
+<div class="relative w-full max-w-md focus-within:ring-2 focus-within:ring-primary rounded-lg transition-all">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 font-body-md text-body-md focus:ring-0" placeholder="Search employees or reports..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center text-secondary hover:text-primary transition-all relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center text-secondary hover:text-primary transition-all">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-2">
+<div class="bg-tertiary-container text-white px-3 py-1 rounded-full font-label-md text-label-md uppercase tracking-wider">Online</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[260px] pt-16 p-gutter min-h-screen">
+<div class="max-w-container-max mx-auto space-y-gutter">
+<!-- Bento Grid Header: User Management Shortcuts -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm hover:shadow-md transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-primary/10 text-primary rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+</div>
+<span class="font-label-md text-label-md text-secondary">+2 new</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary uppercase tracking-wider">Admins</p>
+<p class="font-headline-md text-headline-md font-bold mt-1">12</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm hover:shadow-md transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-tertiary/10 text-tertiary rounded-lg group-hover:bg-tertiary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">badge</span>
+</div>
+<span class="font-label-md text-label-md text-secondary">Active</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary uppercase tracking-wider">HR Managers</p>
+<p class="font-headline-md text-headline-md font-bold mt-1">45</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm hover:shadow-md transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-secondary/10 text-secondary rounded-lg group-hover:bg-secondary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">groups</span>
+</div>
+<span class="font-label-md text-label-md text-secondary">Full Capacity</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary uppercase tracking-wider">Department Leads</p>
+<p class="font-headline-md text-headline-md font-bold mt-1">128</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm hover:shadow-md transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-outline/10 text-outline rounded-lg group-hover:bg-outline group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">person</span>
+</div>
+<span class="font-label-md text-label-md text-error font-bold">14 Away</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary uppercase tracking-wider">General Staff</p>
+<p class="font-headline-md text-headline-md font-bold mt-1">1,024</p>
+</div>
+</section>
+<!-- Main Analytics Area -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Performance Analytics: Productivity Bar Chart -->
+<section class="lg:col-span-8 bg-surface-container-lowest p-gutter rounded-xl border border-outline-variant shadow-sm">
+<div class="flex justify-between items-center mb-8">
+<div>
+<h3 class="font-headline-sm text-headline-sm">Performance Analytics</h3>
+<p class="font-body-md text-body-md text-secondary">Productivity score by division (Current Quarter)</p>
+</div>
+<button class="p-2 hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="flex items-end justify-between h-64 gap-4 px-4">
+<!-- Chart Bar Engineering -->
+<div class="flex flex-col items-center gap-3 flex-1">
+<div class="w-full bg-primary rounded-t-lg relative group h-[85%]">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-inverse-surface text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity">85%</div>
+</div>
+<span class="font-label-md text-label-md text-secondary">Eng</span>
+</div>
+<!-- Chart Bar Marketing -->
+<div class="flex flex-col items-center gap-3 flex-1">
+<div class="w-full bg-primary-container rounded-t-lg relative group h-[60%]">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-inverse-surface text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity">60%</div>
+</div>
+<span class="font-label-md text-label-md text-secondary">Mkt</span>
+</div>
+<!-- Chart Bar Sales -->
+<div class="flex flex-col items-center gap-3 flex-1">
+<div class="w-full bg-primary rounded-t-lg relative group h-[92%]">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-inverse-surface text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity">92%</div>
+</div>
+<span class="font-label-md text-label-md text-secondary">Sales</span>
+</div>
+<!-- Chart Bar HR -->
+<div class="flex flex-col items-center gap-3 flex-1">
+<div class="w-full bg-primary-container rounded-t-lg relative group h-[75%]">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-inverse-surface text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity">75%</div>
+</div>
+<span class="font-label-md text-label-md text-secondary">HR</span>
+</div>
+<!-- Chart Bar Design -->
+<div class="flex flex-col items-center gap-3 flex-1">
+<div class="w-full bg-primary rounded-t-lg relative group h-[88%]">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-inverse-surface text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity">88%</div>
+</div>
+<span class="font-label-md text-label-md text-secondary">Dsn</span>
+</div>
+<!-- Chart Bar Operations -->
+<div class="flex flex-col items-center gap-3 flex-1">
+<div class="w-full bg-primary-container rounded-t-lg relative group h-[55%]">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-inverse-surface text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity">55%</div>
+</div>
+<span class="font-label-md text-label-md text-secondary">Ops</span>
+</div>
+</div>
+</section>
+<!-- Compliance Meter: Circular Progress -->
+<section class="lg:col-span-4 bg-surface-container-lowest p-gutter rounded-xl border border-outline-variant shadow-sm flex flex-col items-center justify-center text-center">
+<h3 class="font-headline-sm text-headline-sm mb-2 w-full text-left">Compliance Meter</h3>
+<p class="font-body-md text-body-md text-secondary mb-8 w-full text-left">On-time reports (Before 9 AM H+1)</p>
+<div class="relative w-48 h-48 mb-6">
+<svg class="w-full h-full compliance-progress" viewbox="0 0 100 100">
+<circle class="text-surface-container-highest" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-width="10"></circle>
+<circle class="text-primary" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="30.14" stroke-linecap="round" stroke-width="10"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-headline-lg text-headline-lg font-bold">88%</span>
+<span class="font-label-md text-label-md text-secondary">Global Rate</span>
+</div>
+</div>
+<div class="bg-tertiary-container/10 p-3 rounded-lg flex items-center gap-2 w-full">
+<span class="material-symbols-outlined text-tertiary">check_circle</span>
+<p class="font-label-md text-label-md text-tertiary font-bold">+5% improvement from last week</p>
+</div>
+</section>
+<!-- Delayed Task Trends: Line Chart Visual -->
+<section class="lg:col-span-6 bg-surface-container-lowest p-gutter rounded-xl border border-outline-variant shadow-sm">
+<h3 class="font-headline-sm text-headline-sm mb-6">Delayed Tasks Trend</h3>
+<div class="relative h-48 w-full">
+<!-- SVG Line Chart Mockup -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 500 100">
+<path class="text-error" d="M0,80 Q50,70 100,85 T200,40 T300,60 T400,20 T500,30" fill="none" stroke="currentColor" stroke-width="3"></path>
+<circle class="text-error" cx="0" cy="80" fill="currentColor" r="4"></circle>
+<circle class="text-error" cx="200" cy="40" fill="currentColor" r="4"></circle>
+<circle class="text-error" cx="400" cy="20" fill="currentColor" r="4"></circle>
+<circle class="text-error" cx="500" cy="30" fill="currentColor" r="4"></circle>
+</svg>
+<div class="flex justify-between mt-4">
+<span class="font-label-md text-label-md text-secondary">Mon</span>
+<span class="font-label-md text-label-md text-secondary">Tue</span>
+<span class="font-label-md text-label-md text-secondary">Wed</span>
+<span class="font-label-md text-label-md text-secondary">Thu</span>
+<span class="font-label-md text-label-md text-secondary">Fri</span>
+<span class="font-label-md text-label-md text-secondary">Sat</span>
+</div>
+</div>
+</section>
+<!-- Export & Reporting Controls -->
+<section class="lg:col-span-6 bg-surface-container-lowest p-gutter rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between">
+<div>
+<h3 class="font-headline-sm text-headline-sm mb-4">Export &amp; Reporting</h3>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-secondary">Select Period</label>
+<select class="w-full bg-surface-container-low border-outline-variant rounded-lg font-body-md text-body-md focus:ring-primary focus:border-primary">
+<option>October 2023</option>
+<option>September 2023</option>
+<option>August 2023</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-secondary">Division</label>
+<select class="w-full bg-surface-container-low border-outline-variant rounded-lg font-body-md text-body-md focus:ring-primary focus:border-primary">
+<option>All Divisions</option>
+<option>Engineering</option>
+<option>Marketing</option>
+<option>Sales</option>
+</select>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-3">
+<button class="flex-1 min-w-[120px] bg-primary text-white py-3 px-4 rounded-lg font-button-text flex items-center justify-center gap-2 hover:bg-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">table_view</span>
+                            Export to Excel
+                        </button>
+<button class="flex-1 min-w-[120px] bg-surface-container-high border border-outline-variant text-on-surface py-3 px-4 rounded-lg font-button-text flex items-center justify-center gap-2 hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+                            Download PDF
+                        </button>
+<button class="w-12 h-12 bg-surface-container-high border border-outline-variant text-on-surface rounded-lg flex items-center justify-center hover:bg-surface-variant transition-colors" title="CSV">
+<span class="material-symbols-outlined">csv</span>
+</button>
+</div>
+</section>
+</div>
+<!-- Recent Activity / Staff Status Feed -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+<div class="px-gutter py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h3 class="font-headline-sm text-headline-sm">Staff Activity Log</h3>
+<div class="flex gap-2">
+<span class="inline-flex items-center px-2 py-1 rounded bg-tertiary-fixed text-on-tertiary-fixed font-label-md text-label-md">Active</span>
+<span class="inline-flex items-center px-2 py-1 rounded bg-secondary-fixed text-on-secondary-fixed font-label-md text-label-md">Pending</span>
+</div>
+</div>
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-gutter py-4 font-label-md text-label-md text-secondary">Employee</th>
+<th class="px-gutter py-4 font-label-md text-label-md text-secondary">Division</th>
+<th class="px-gutter py-4 font-label-md text-label-md text-secondary">Latest Report</th>
+<th class="px-gutter py-4 font-label-md text-label-md text-secondary">Status</th>
+<th class="px-gutter py-4 font-label-md text-label-md text-secondary">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="px-gutter py-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full" data-alt="A professional portrait of a senior HR manager with a warm, confident expression. She is wearing professional attire and is positioned in a bright, modern corporate office with soft, natural lighting. The color palette is composed of soft neutrals and cool blues, aligning with the clean, reliable aesthetic of the enterprise dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC453rAlOhSDkQMYnVMuMIHte1SECPZTNKldhfh7-_ASQADFKU09xD2KjeJxcqoNQbtwNG1QaIK5AVBvYtT-SgsZgKzu5HPYLZgnfwOJ0fqIBbWyDQBwNWRuMOr72R1bO_kjM57mNE1ZHB6C7srYQ3YlQChfRajR-TpNqoej2fkUUgW61Sdh5YVp96Yq3vGl23zpeK-3gGnEW8ZNkF-CNbFmYqCtEJ9Xwqa_zN3aQCb3FDP0l8s06Xu9A"/>
+<span class="font-body-md text-body-md font-bold">Elena Vance</span>
+</div>
+</td>
+<td class="px-gutter py-4 font-body-md text-body-md">Marketing</td>
+<td class="px-gutter py-4 font-body-md text-body-md">Today, 08:42 AM</td>
+<td class="px-gutter py-4">
+<span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded text-xs font-bold">APPROVED</span>
+</td>
+<td class="px-gutter py-4">
+<button class="text-primary hover:underline font-label-md">View Details</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-gutter py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center font-bold text-primary">JD</div>
+<span class="font-body-md text-body-md font-bold">Jordan Doe</span>
+</div>
+</td>
+<td class="px-gutter py-4 font-body-md text-body-md">Engineering</td>
+<td class="px-gutter py-4 font-body-md text-body-md">Today, 08:58 AM</td>
+<td class="px-gutter py-4">
+<span class="bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs font-bold">PENDING</span>
+</td>
+<td class="px-gutter py-4">
+<button class="text-primary hover:underline font-label-md">Review</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-gutter py-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full" data-alt="A profile photo of a male engineer in a professional work environment. The lighting is crisp and cool-toned, with high clarity and detail. He looks engaged and focused, wearing a modern gray polo shirt. The background is a slightly blurred, high-tech office space, maintaining the dashboard's clean and efficient corporate modern theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfEJUR1k2UfvLu7z2IK81ObreaTlNySLZo0FK6YF1EP8xVvyrhjr5PEMwDIUwREkH5YTZqbLBw5Z8QBtEgKkguprnyy_FryGomeTu_bB08KGYAizPPHL8zH8Wg3bg4u963QQiLSq6hxOcnyG0EsH24tNkYF2xJIbBQ9oQGswG0epFmmf8LDz-kt7yWb4ZdAj3a744etZEdMhVabJ7fU09VSDELdOwMT8_rI56YRQj2Wv7Zi2-yMkqdEA"/>
+<span class="font-body-md text-body-md font-bold">Marcus Thorne</span>
+</div>
+</td>
+<td class="px-gutter py-4 font-body-md text-body-md">Engineering</td>
+<td class="px-gutter py-4 font-body-md text-body-md">Delayed (Locked)</td>
+<td class="px-gutter py-4">
+<span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs font-bold">MISSING</span>
+</td>
+<td class="px-gutter py-4">
+<button class="text-primary hover:underline font-label-md">Notify</button>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="p-4 bg-surface-container-low text-center">
+<button class="font-label-md text-label-md text-secondary hover:text-primary transition-colors flex items-center gap-2 mx-auto">
+                        View all employee records <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</section>
+</div>
+</main>
+<!-- FAB for Quick Actions -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50 group">
+<span class="material-symbols-outlined text-[28px] group-hover:rotate-90 transition-transform duration-300">add</span>
+<div class="absolute right-16 bg-inverse-surface text-white px-3 py-1 rounded font-label-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">New Audit</div>
+</button>
+<script>
+        // Micro-interactions for Charts
+        document.addEventListener('DOMContentLoaded', () => {
+            const bars = document.querySelectorAll('.chart-bar');
+            // Bars are already height-styled via Tailwind h-[X%] classes, 
+            // but we could animate them here if needed for extra flair.
+        });
+
+        // Search interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-primary');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-primary');
+        });
+    </script>
+</body></html>
