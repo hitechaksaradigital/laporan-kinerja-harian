@@ -1,15 +1,43 @@
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Icon from "./Icon.jsx";
 
-export default function DailyLogForm() {
+const badgeFor = (status) => {
+  switch (status) {
+    case "Completed":
+    case "Approved":
+      return { label: "Approved", cls: "bg-emerald-100 text-emerald-700 border-emerald-200" };
+    case "In Progress":
+      return { label: "In Progress", cls: "bg-blue-100 text-blue-700 border-blue-200" };
+    default:
+      return { label: "Pending", cls: "bg-amber-100 text-amber-700 border-amber-200" };
+  }
+};
+
+export default function DailyLogForm({ onAdd }) {
   const [status, setStatus] = useState("idle"); // idle | loading | success
   const [formKey, setFormKey] = useState(0);
-  const formRef = useRef(null);
+  const ref = useState({ current: null })[0];
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const data = new FormData(e.target);
+    const title = (data.get("title") || "").toString().trim();
+    const description = (data.get("description") || "").toString().trim();
+    const hr = (data.get("hr") || "").toString().trim();
+    const min = (data.get("min") || "").toString().trim();
+    const taskStatus = (data.get("status") || "In Progress").toString();
+
+    const duration =
+      [hr && `${hr}h`, min && `${min}m`].filter(Boolean).join(" ") || "0h 0m";
+
     setStatus("loading");
     setTimeout(() => {
+      onAdd({
+        title: title || "Untitled Task",
+        subtitle: description || "No description provided",
+        duration,
+        status: taskStatus,
+      });
       setStatus("success");
       setTimeout(() => {
         setStatus("idle");
@@ -30,13 +58,14 @@ export default function DailyLogForm() {
         </span>
       </div>
 
-      <form key={formKey} className="space-y-6" onSubmit={handleSubmit} ref={formRef}>
+      <form key={formKey} className="space-y-6" onSubmit={handleSubmit} ref={ref}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-1">
             <label className="font-label-md text-label-md text-on-surface-variant block">
               Task Title
             </label>
             <input
+              name="title"
               className="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-primary text-body-md"
               placeholder="e.g. Client Presentation Prep"
               type="text"
@@ -48,6 +77,7 @@ export default function DailyLogForm() {
               Status
             </label>
             <select
+              name="status"
               className="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-primary text-body-md"
               defaultValue="In Progress"
             >
@@ -63,6 +93,7 @@ export default function DailyLogForm() {
             Description
           </label>
           <textarea
+            name="description"
             className="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-primary text-body-md"
             placeholder="Detailed notes on what was accomplished..."
             rows="3"
@@ -76,12 +107,14 @@ export default function DailyLogForm() {
             </label>
             <div className="flex gap-2">
               <input
+                name="hr"
                 className="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-primary text-body-md"
                 placeholder="Hr"
                 type="number"
                 min="0"
               />
               <input
+                name="min"
                 className="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-primary text-body-md"
                 placeholder="Min"
                 type="number"

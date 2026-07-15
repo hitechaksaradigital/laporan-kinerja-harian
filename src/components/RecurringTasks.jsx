@@ -6,7 +6,7 @@ const recurring = [
   { title: "Admin/Emails", meta: "0.5h • Operations" },
 ];
 
-export default function RecurringTasks() {
+export default function RecurringTasks({ onCopy }) {
   return (
     <div className="work-card p-6">
       <div className="flex items-center justify-between mb-4">
@@ -32,6 +32,7 @@ export default function RecurringTasks() {
               <p className="text-[10px] text-secondary">{task.meta}</p>
             </div>
             <button
+              onClick={() => onCopy?.(task)}
               className="material-symbols-outlined text-outline group-hover:text-primary"
               aria-label={`Copy ${task.title}`}
             >
