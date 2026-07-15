@@ -1,22 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Icon from "./Icon.jsx";
 
-const badgeFor = (status) => {
-  switch (status) {
-    case "Completed":
-    case "Approved":
-      return { label: "Approved", cls: "bg-emerald-100 text-emerald-700 border-emerald-200" };
-    case "In Progress":
-      return { label: "In Progress", cls: "bg-blue-100 text-blue-700 border-blue-200" };
-    default:
-      return { label: "Pending", cls: "bg-amber-100 text-amber-700 border-amber-200" };
-  }
-};
+const inputClass =
+  "w-full px-3 py-2 rounded-lg bg-surface-container-low border border-outline-variant text-body-md text-on-surface placeholder:text-outline outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/30";
+const labelClass =
+  "font-label-md text-label-md text-on-surface-variant block mb-1.5";
 
 export default function DailyLogForm({ onAdd }) {
   const [status, setStatus] = useState("idle"); // idle | loading | success
   const [formKey, setFormKey] = useState(0);
-  const ref = useState({ current: null })[0];
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -48,37 +40,49 @@ export default function DailyLogForm({ onAdd }) {
 
   return (
     <div className="work-card p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="font-headline-sm text-headline-sm flex items-center gap-2">
-          <Icon name="add_task" className="text-primary" />
-          Daily Log Entry
-        </h3>
-        <span className="font-label-md text-label-md text-secondary">
-          New Entry • Today
+      <div className="flex items-center justify-between mb-6 pb-5 border-b border-outline-variant">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-secondary-container flex items-center justify-center">
+            <Icon name="add_task" className="text-primary" />
+          </div>
+          <div>
+            <h3 className="font-headline-sm text-headline-sm leading-none">
+              Daily Log Entry
+            </h3>
+            <p className="font-label-md text-label-md text-secondary mt-1">
+              New Entry • Today
+            </p>
+          </div>
+        </div>
+        <span className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low text-secondary">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          <span className="font-label-md text-label-md">Auto-saved</span>
         </span>
       </div>
 
-      <form key={formKey} className="space-y-6" onSubmit={handleSubmit} ref={ref}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-1">
-            <label className="font-label-md text-label-md text-on-surface-variant block">
+      <form key={formKey} className="space-y-5" onSubmit={handleSubmit}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label htmlFor="title" className={labelClass}>
               Task Title
             </label>
             <input
+              id="title"
               name="title"
-              className="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-primary text-body-md"
+              className={inputClass}
               placeholder="e.g. Client Presentation Prep"
               type="text"
               required
             />
           </div>
-          <div className="space-y-1">
-            <label className="font-label-md text-label-md text-on-surface-variant block">
+          <div>
+            <label htmlFor="status" className={labelClass}>
               Status
             </label>
             <select
+              id="status"
               name="status"
-              className="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-primary text-body-md"
+              className={`${inputClass} appearance-none cursor-pointer`}
               defaultValue="In Progress"
             >
               <option>Completed</option>
@@ -88,54 +92,62 @@ export default function DailyLogForm({ onAdd }) {
           </div>
         </div>
 
-        <div className="space-y-1">
-          <label className="font-label-md text-label-md text-on-surface-variant block">
+        <div>
+          <label htmlFor="description" className={labelClass}>
             Description
           </label>
           <textarea
+            id="description"
             name="description"
-            className="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-primary text-body-md"
+            className={inputClass}
             placeholder="Detailed notes on what was accomplished..."
             rows="3"
           ></textarea>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-1">
-            <label className="font-label-md text-label-md text-on-surface-variant block">
-              Duration
-            </label>
-            <div className="flex gap-2">
-              <input
-                name="hr"
-                className="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-primary text-body-md"
-                placeholder="Hr"
-                type="number"
-                min="0"
-              />
-              <input
-                name="min"
-                className="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-primary text-body-md"
-                placeholder="Min"
-                type="number"
-                min="0"
-              />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label className={labelClass}>Duration</label>
+            <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <input
+                  name="hr"
+                  className={`${inputClass} pr-8`}
+                  placeholder="0"
+                  type="number"
+                  min="0"
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary text-body-sm">
+                  h
+                </span>
+              </div>
+              <div className="relative flex-1">
+                <input
+                  name="min"
+                  className={`${inputClass} pr-8`}
+                  placeholder="0"
+                  type="number"
+                  min="0"
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary text-body-sm">
+                  m
+                </span>
+              </div>
             </div>
           </div>
-          <div className="space-y-1">
-            <label className="font-label-md text-label-md text-on-surface-variant block">
-              Attachments
-            </label>
-            <div className="border-2 border-dashed border-outline-variant rounded-lg p-3 text-center cursor-pointer hover:bg-surface-container-low transition-colors flex items-center justify-center gap-2">
+          <div>
+            <label className={labelClass}>Attachments</label>
+            <label className="flex items-center justify-center gap-2 h-[42px] border-2 border-dashed border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low hover:border-primary transition-colors">
               <Icon name="upload_file" className="text-outline" />
               <span className="text-body-sm text-secondary">
                 Drop files here or click to upload
               </span>
-            </div>
+              <input type="file" className="hidden" multiple />
+            </label>
           </div>
         </div>
 
-        <div className="pt-4 flex justify-end gap-3">
+        <div className="pt-2 flex justify-end gap-3">
           <button
             className="px-6 py-2 rounded-lg text-secondary border border-outline-variant font-button-text hover:bg-surface-container transition-colors"
             type="reset"
