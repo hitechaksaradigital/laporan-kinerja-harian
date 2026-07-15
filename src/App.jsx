@@ -7,7 +7,7 @@ import RecentActivities from "./components/RecentActivities.jsx";
 import TodayProgress from "./components/TodayProgress.jsx";
 import RecurringTasks from "./components/RecurringTasks.jsx";
 import StatsCard from "./components/StatsCard.jsx";
-import { fetchTasks, createTask } from "./lib/tasks.js";
+import { fetchTasks, createTask, updateTask } from "./lib/tasks.js";
 
 const seedTasks = [
   {
@@ -27,6 +27,7 @@ const seedTasks = [
 export default function App() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editing, setEditing] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -51,6 +52,15 @@ export default function App() {
       setTasks((prev) => [created, ...prev]);
     } catch (err) {
       console.error("Failed to save task:", err.message);
+    }
+  };
+
+  const handleUpdate = async (id, patch) => {
+    try {
+      const updated = await updateTask(id, patch);
+      setTasks((prev) => prev.map((t) => (t.id === id ? updated : t)));
+    } catch (err) {
+      console.error("Failed to update task:", err.message);
     }
   };
 
@@ -84,13 +94,18 @@ export default function App() {
 
         <div className="grid grid-cols-12 gap-gutter">
           <section className="col-span-12 lg:col-span-8 space-y-gutter">
-            <DailyLogForm onAdd={addTask} />
+            <DailyLogForm
+              editing={editing}
+              onAdd={addTask}
+              onUpdate={handleUpdate}
+              onCancelEdit={() => setEditing(null)}
+            />
             {loading ? (
               <div className="work-card p-6 text-secondary text-body-md">
                 Loading tasks…
               </div>
             ) : (
-              <RecentActivities tasks={tasks} />
+              <RecentActivities tasks={tasks} onEdit={setEditing} />
             )}
           </section>
 

@@ -6,9 +6,19 @@ const inputClass =
 const labelClass =
   "font-label-md text-label-md text-on-surface-variant block mb-1.5";
 
-export default function DailyLogForm({ onAdd }) {
+const parseDuration = (d = "") => {
+  const h = (d.match(/(\d+)h/) || [])[1] || "";
+  const m = (d.match(/(\d+)m/) || [])[1] || "";
+  return { h, m };
+};
+
+export default function DailyLogForm({
+  editing = null,
+  onAdd,
+  onUpdate,
+  onCancelEdit,
+}) {
   const [status, setStatus] = useState("idle"); // idle | loading | success
-  const [formKey, setFormKey] = useState(0);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,42 +32,63 @@ export default function DailyLogForm({ onAdd }) {
     const duration =
       [hr && `${hr}h`, min && `${min}m`].filter(Boolean).join(" ") || "0h 0m";
 
+    const task = {
+      title: title || "Untitled Task",
+      subtitle: description || "No description provided",
+      duration,
+      status: taskStatus,
+    };
+
     setStatus("loading");
-    setTimeout(() => {
-      onAdd({
-        title: title || "Untitled Task",
-        subtitle: description || "No description provided",
-        duration,
-        status: taskStatus,
-      });
-      setStatus("success");
-      setTimeout(() => {
+    setTimeout(async () => {
+      try {
+        if (editing) {
+          await onUpdate(editing.id, task);
+        } else {
+          await onAdd(task);
+        }
+        setStatus("success");
+        setTimeout(() => {
+          setStatus("idle");
+          e.target.reset();
+          if (editing) onCancelEdit?.();
+        }, 2000);
+      } catch (err) {
+        console.error("Failed to save task:", err.message);
         setStatus("idle");
-        setFormKey((k) => k + 1);
-      }, 2000);
+      }
     }, 1000);
   };
+
+  const dur = parseDuration(editing?.duration);
+  const formKey = editing ? `edit-${editing.id}` : "new";
 
   return (
     <div className="work-card p-6">
       <div className="flex items-center justify-between mb-6 pb-5 border-b border-outline-variant">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-secondary-container flex items-center justify-center">
-            <Icon name="add_task" className="text-primary" />
+            <Icon name={editing ? "edit_note" : "add_task"} className="text-primary" />
           </div>
           <div>
             <h3 className="font-headline-sm text-headline-sm leading-none">
-              Daily Log Entry
+              {editing ? "Edit Log Entry" : "Daily Log Entry"}
             </h3>
             <p className="font-label-md text-label-md text-secondary mt-1">
-              New Entry • Today
+              {editing ? `Editing • ${editing.title}` : "New Entry • Today"}
             </p>
           </div>
         </div>
-        <span className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low text-secondary">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-          <span className="font-label-md text-label-md">Auto-saved</span>
-        </span>
+        {editing && (
+          <button
+            type="button"
+            onClick={onCancelEdit}
+            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low text-secondary hover:bg-surface-container-high transition-colors"
+          >
+            <Icon name="close" className="text-sm" />
+            <span className="font-label-md text-label-md">Cancel</span>
+          </button>
+        )}
       </div>
 
       <form key={formKey} className="space-y-5" onSubmit={handleSubmit}>
@@ -69,6 +100,7 @@ export default function DailyLogForm({ onAdd }) {
             <input
               id="title"
               name="title"
+              defaultValue={editing?.title || ""}
               className={inputClass}
               placeholder="e.g. Client Presentation Prep"
               type="text"
@@ -82,8 +114,8 @@ export default function DailyLogForm({ onAdd }) {
             <select
               id="status"
               name="status"
+              defaultValue={editing?.status || "In Progress"}
               className={`${inputClass} appearance-none cursor-pointer`}
-              defaultValue="In Progress"
             >
               <option>Completed</option>
               <option>In Progress</option>
@@ -99,6 +131,7 @@ export default function DailyLogForm({ onAdd }) {
           <textarea
             id="description"
             name="description"
+            defaultValue={editing?.subtitle || ""}
             className={inputClass}
             placeholder="Detailed notes on what was accomplished..."
             rows="3"
@@ -112,6 +145,7 @@ export default function DailyLogForm({ onAdd }) {
               <div className="relative flex-1">
                 <input
                   name="hr"
+                  defaultValue={dur.h}
                   className={`${inputClass} pr-8`}
                   placeholder="0"
                   type="number"
@@ -124,6 +158,7 @@ export default function DailyLogForm({ onAdd }) {
               <div className="relative flex-1">
                 <input
                   name="min"
+                  defaultValue={dur.m}
                   className={`${inputClass} pr-8`}
                   placeholder="0"
                   type="number"
@@ -163,15 +198,15 @@ export default function DailyLogForm({ onAdd }) {
             type="submit"
             disabled={status !== "idle"}
           >
-            {status === "idle" && "Submit Task"}
+            {status === "idle" && (editing ? "Update Task" : "Submit Task")}
             {status === "loading" && (
               <span className="inline-flex items-center gap-2">
-                <Icon name="refresh" className="animate-spin" /> Submitting
+                <Icon name="refresh" className="animate-spin" /> Saving
               </span>
             )}
             {status === "success" && (
               <span className="inline-flex items-center gap-2">
-                <Icon name="check_circle" /> Success
+                <Icon name="check_circle" /> Saved
               </span>
             )}
           </button>

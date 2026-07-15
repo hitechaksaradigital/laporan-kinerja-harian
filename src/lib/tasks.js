@@ -23,6 +23,18 @@ export async function createTask(task) {
   return rowToTask(data);
 }
 
+export async function updateTask(id, patch) {
+  const { data, error } = await supabase
+    .from(TABLE)
+    .update(taskToRow(patch))
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return rowToTask(data);
+}
+
 export async function deleteTask(id) {
   const { error } = await supabase.from(TABLE).delete().eq("id", id);
   if (error) throw error;
