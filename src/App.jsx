@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "./components/Sidebar.jsx";
 import Topbar from "./components/Topbar.jsx";
 import ReminderAlert from "./components/ReminderAlert.jsx";
@@ -7,19 +7,16 @@ import RecentActivities from "./components/RecentActivities.jsx";
 import TodayProgress from "./components/TodayProgress.jsx";
 import RecurringTasks from "./components/RecurringTasks.jsx";
 import StatsCard from "./components/StatsCard.jsx";
+import { fetchTasks, createTask } from "./lib/tasks.js";
 
-let nextId = 3;
-
-const initialTasks = [
+const seedTasks = [
   {
-    id: 1,
     title: "Project Sync Call",
     subtitle: "Internal coordination for Q4 roadmap",
     duration: "1h 30m",
     status: "Approved",
   },
   {
-    id: 2,
     title: "Email Communications",
     subtitle: "Follow-up with vendor support",
     duration: "0h 45m",
@@ -28,10 +25,33 @@ const initialTasks = [
 ];
 
 export default function App() {
-  const [tasks, setTasks] = useState(initialTasks);
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const addTask = (task) => {
-    setTasks((prev) => [{ id: nextId++, ...task }, ...prev]);
+  useEffect(() => {
+    (async () => {
+      try {
+        let rows = await fetchTasks();
+        if (rows.length === 0) {
+          for (const t of seedTasks) await createTask(t);
+          rows = await fetchTasks();
+        }
+        setTasks(rows);
+      } catch (err) {
+        console.error("Failed to load tasks:", err.message);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  const addTask = async (task) => {
+    try {
+      const created = await createTask(task);
+      setTasks((prev) => [created, ...prev]);
+    } catch (err) {
+      console.error("Failed to save task:", err.message);
+    }
   };
 
   const copyRecurring = (task) => {
@@ -65,7 +85,13 @@ export default function App() {
         <div className="grid grid-cols-12 gap-gutter">
           <section className="col-span-12 lg:col-span-8 space-y-gutter">
             <DailyLogForm onAdd={addTask} />
-            <RecentActivities tasks={tasks} />
+            {loading ? (
+              <div className="work-card p-6 text-secondary text-body-md">
+                Loading tasks…
+              </div>
+            ) : (
+              <RecentActivities tasks={tasks} />
+            )}
           </section>
 
           <aside className="col-span-12 lg:col-span-4 space-y-gutter">
